@@ -1,0 +1,20 @@
+version: '3'
+services:
+  apachephp56:
+    extra_hosts:
+      - "system.local-landgorilla.com:127.0.0.1"
+      - "local.test.com:127.0.0.1"
+    volumes:
+      - ./logs:/var/log/apache2/:rw
+      - ./apps:/apps/:rw
+      - ./docker/apachephp56/vhosts:/usr/local/apache2/conf/vhosts_conf
+      - ./docker/apachephp56/conf/httpd.conf:/usr/local/apache2/conf/httpd.conf
+      - ./docker/apachephp56/ssl/server.crt:/usr/local/apache2/conf/server.crt
+      - ./docker/apachephp56/ssl/server.key:/usr/local/apache2/conf/server.key
+      - ./docker/apachephp56/ssl/server.pem:/usr/local/apache2/conf/server.pem
+    environment:
+      EXCLUDE_PORTS: 443
+    ports:
+      - "9296:80" 
+      - "443:443" 
+

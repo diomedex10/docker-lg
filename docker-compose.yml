@@ -1,0 +1,41 @@
+version: '3'
+services:
+  apachephp56:
+    container_name: apachephp56
+    image: docker:apachephp56
+    build:
+      context: ./docker/apachephp56/
+    links:
+      - mysql56
+    environment:
+      - TZ=America/Lima
+    networks:
+      lg_net:
+        ipv4_address: 172.21.0.3    
+
+  mysql56:  
+    image: mysql:5.6
+    container_name: mysql56
+    ports:
+      - "3308:3306"
+    environment:
+      - EXTRA_OPTS=--lower_case_table_names=1
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_USER=admins
+      - MYSQL_PASSWORD=123456
+      - TZ=America/Lima
+    volumes:
+      - ./data/mysql56/:/var/lib/mysql:rw
+      - ./data/share/:/home/:rw
+    networks:
+      lg_net:
+        ipv4_address: 172.21.0.4    
+
+networks:
+  lg_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.21.0.0/16 
+    
+
